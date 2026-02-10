@@ -1,7 +1,6 @@
 const banco = require("./conexao");
 
 const LivroSchema = new banco.Schema({
-  _id: banco.Schema.Types.ObjectId,
   titulo: String,
   codEditora: Number,
   resumo: String,

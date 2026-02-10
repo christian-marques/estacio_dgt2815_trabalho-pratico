@@ -17,6 +17,7 @@ router.post("/", async (req, res) => {
     await incluir(req.body);
     res.json({ sucesso: true, mensagem: "Livro incluído com sucesso." });
   } catch (err) {
+    console.error('Erro incluir /livros:', err);
     res.status(500).json({ sucesso: false, mensagem: "Erro ao incluir livro." });
   }
 });
@@ -24,9 +25,16 @@ router.post("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const codigo = req.params.id;
-    await excluir(codigo);
-    res.json({ sucesso: true, mensagem: "Livro excluído com sucesso." });
+    console.log('DELETE /livros id=', codigo);
+    const resultado = await excluir(codigo);
+    console.log('Resultado delete:', resultado);
+    if (resultado && resultado.deletedCount === 1) {
+      res.json({ sucesso: true, mensagem: "Livro excluído com sucesso." });
+    } else {
+      res.status(404).json({ sucesso: false, mensagem: "Livro não encontrado." });
+    }
   } catch (err) {
+    console.error('Erro ao processar DELETE /livros/:id', err);
     res.status(500).json({ sucesso: false, mensagem: "Erro ao excluir livro." });
   }
 });
